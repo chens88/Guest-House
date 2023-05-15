@@ -96,16 +96,21 @@ src
 │               │
 │               ├───data
 │               │       DataException.java        -- data layer custom exception
-│               │       HostRepository.java       -- concrete repository
-│               │       GuestRepository.java      -- repository interface
+│               │       ReservationsFileRepository.java       -- concrete repository
+│               │       ReservationsRepository.java      -- repository interface
 │               │
 │               ├───domain
-│               │       PanelResult.java          -- domain result for handling success/failure
-│               │       PanelService.java         -- panel validation/rules
+│               │       ReservationsResult.java   -- domain result for handling success/failure
+│               │       ReservationsService.java    -- reservations validation/rules
+                        HostResult.java
+                        HostService.java
+                        GuestResult.java
+                        GuestService.java
+
 │               │
 │               ├───models
-│               │       Material.java             -- enum representing the 5 materials
-│               │       Panel.java                -- solar panel model
+│               │       Hosts.java             -- array of hosts
+│               │       Reservations.java      -- model
 │               │
 │               └───ui
 │                       Controller.java           -- UI controller
@@ -116,9 +121,9 @@ src
         └───learn
             └───myhouseisyourhouse
                 ├───data
-                │       PanelFileRepositoryTest.java    -- PanelFileRepository tests
-                │       PanelRepositoryTestDouble.java  -- helps tests the service, implements PanelRepository
+                │       ReservationsFileRepositoryTest.java --ReservationsFileRepository tests
+                │       ReservationsRepositoryTestDouble.java -- helps tests the service, implements ReservationsRepository
                 │
                 └───domain
-                        PanelServiceTest.java           -- PanelService tests
-                        PanelServiceTestDouble.java     -- helps tests the service, implements PanelService
+                        ReservationsServiceTest.java  -- ReservationService tests
+                        ReservationsServiceTestDouble.java  -- helps tests the service, implements ReservationsService
