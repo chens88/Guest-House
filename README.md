@@ -20,75 +20,53 @@
 
  ## Don't Wreck My House!
 
-### DATA 
+### TASK LIST
+- [ ] Set up Maven project [1.5 hour]
+    - [ ] Create packages and classes
+    - [ ] Download data files (add to project)
+        - [ ] Create data folder at root level 
+        - [ ] Add files to folder 
+    - [ ] Add dependencies - SpringDI & JUnit
+    - [ ] Add Spring dependency injection with XML
+    - [ ] Add .XML file 
+
+- [ ] Create Models [1 hour]
+    - [ ] Add all fields
+    - [ ] Add all getters and setters 
+    - [ ] Add enum for States
+    - [ ] *Might want to override toString - to get back something meaningful
+
+- [ ] Create Data Layer [6 hours]
+    - [ ] Build GuestRepository and GuestFileRepository [30 min]
+    - [ ] Build HostRepository and HostFileRepository [30 min]
+    - [ ] Test GuestFileRepository [30 min]
+    - [ ] Test HostFileRepository [30 min]
+    - [ ] Build ReservationRepository and ReservationFileRepository [2 hours]
+    - [ ] Test ReservationFileRepository [1 hour]
+
+- [ ] Create Domain Layer [8-10 hours]
+    - [ ] Build GuestService [1 hour]
+    - [ ] Build HostService [1 hour]
+    - [ ] Build Results [30 min]
+    - [ ] Build Repository HostRepositoryDouble [30 min]
+    - [ ] Build Repository GuestRepositoryDouble [30 min]
+    - [ ] Test GuestService [1 hour]
+    - [ ] Test HostService [1 hour]
+    - [ ] Build ReservationService [2-3 hour]
+    - [ ] Build Repository Double for ReservationService [30 min]
+    - [ ] Test ReservationService [1-2 hour]
+
+- [ ] Create UI Layer [4 hours]
+    - [ ] Create controller class
+    - [ ] Create view class
+    - [ ] Work back and forth between the two classes     
+
 
 - Guest is a customer who wants to book place to stay (data provided)
 - Host is the accommocation provider/property owner (data provided)
 - Location is the rental property 
     *** Host and Location are combined ***
 - Reservation is one or more days where guests are booked into a location/host (data provided)
-
-- [ ] Print Main Menu (1 hours)
-    - [ ] Accepts user input: 
-         - 0. Exit
-         - 1. View All Reservations for a Host
-         - 2. Make a Reservation
-         - 3. Edit a Reservation 
-         - 4. Cancel a Reservation 
-          Select [0-4]:
-
-- [ ] View Reservations for Host (2 hours)
-    - [ ] Admin may enter host email as unique identifier to find the host: 
-        - [ ] Prints "Host Name & Email: 
-            - [ ] If host is not found, display a message
-        - [ ] Prints list of reservations
-            - [ ] If no reservation, display a message 
-            - [ ] List should include id, check-in date-check-out date, guest name, guest email
-            - [ ] Sorts and displays ALL reservation in the order of date (soonest - latest)        
-
-- [ ] Make a Reservation (4 hours)
-    - [ ] Books accomodation for a guest at a host/location
-        - [ ] Admin may enter a unique value (guest email) to identify guest or search for initial and pick one out of list
-        - [ ] Admin may enter a unique value (host email) to identify guest or search for initial and pick one out of list
-        - [ ] Should display all future reservations for the selected host so that admin can choose available dates
-            - [ ] Should be able to enter a start and end date for the reservation 
-        - [ ] Should calculate total cost of reservation and display a summary, and a prompt asking the admin to confirm
-            - [ ] Reservation total is based on host's standard rate and weekend rate
-            - [ ] Include what day of week for each day of the reservation:
-                - [ ] For weekday (Sunday, Monday, Tuesday, Wednesday, or Thursday) or a weekend (Friday or Saturday) - for weekday, apply standard rate & for weekend, apply weekend rates 
-        - [ ] If Y on confirmation, save the reservation and print success message   
-        
-- [ ] Make Reservation Validations (2 hours)
-    - [ ] Guest, host, and start and end dates are required
-    - [ ] Requires that guest and host must already exist in "database' - guests and hosts cannot be created
-    - [ ] Start date must be before the end date
-    - [ ] Reservation should not overlap existing reservation dates
-    - [ ] Reservation start date must be in the future
-
-
-- [ ] Edit a Reservation (3 hours)
-    - [ ] Finds a reservation 
-        - [ ] Admin can change guest's start and end date - & no other data can be edited
-        - [ ] Recalculates total, display a summary, and ask the admin for confirmation.
-            - [ ] Calculates new total cost
-            - [ ] Displays summary 
-            - [ ] Asks to confirm the change  
-
-- [ ] Edit Reservation Validations (2 hours)
-    - [ ] Requires guest, host, and start & end dates
-    - [ ] Requires that guest and host must already exist in "database' - guests and hosts cannot be created
-    - [ ] Start date must be before the end date
-    - [ ] Reservation should not overlap existing reservation dates
-
-
-- [ ] Cancel a Reservation (2 hours)
-    - [ ] Finds a future reservation
-        - [ ] Ensures that only future reservations are displayed 
-    - [ ] If success, display a message 
-
-- [ ] Cancel Reservation Validations (1 hour)
-    - [ ] Ensures that only future reservations can be cancelled
-
 
 ```
 src
@@ -215,46 +193,29 @@ src
 
 ## Domain Layer   
 ### domain.ReservationService.java
-- 'private ReservationRepository repository' - constructor 
-- 'private Reservation reservation'
-- 'private ReservaitonService(ReservationRepository)'
-- 'public Reservation getReservation'
-- 'public void setReservation'
+- 'private ReservationRepository repository' - pass in constructor 
+- 'private HostRepository repository' - pass in constructor 
+- 'private GuestRepository repository' - pass in constructor 
+- 'private ReservaitonService(ReservationRepository, GuestRepository, HostRepository)'
 - 'public List findByHost (Host host)' //takes a host or hostId
+- 'public List findByGuestandHost 
 - 'public result makeReservation()'
 - 'public result edit <Reservation>' - 
 - 'public result cancelReservation' - delete or cancel and pass in reservation 
 - 'public result validateReservation'
-** needs reservation repo, host reposit, guest reposito
-** constructor to pass these 3 items 
-** needs public list of reservations - findbyhost and pass in host
-** might need public list of reservation - find byguestandhoest to passs 
-** public result <reservation> add - passing reservation as an argument - same for edit and cancel 
-** needs validate methods - broken down to validatenull, uniquedate, vaidatechildrenexist, and more 
+    ** needs validate methods - broken down to validatenull, uniquedate, vaidatechildrenexist, and more 
 
-** Dont need model 
 
 ### domain.HostService.java
-<!-- - 'private HostService service' -->
-- 'private Host host'
 - 'public HostService(HostRepository)'
-- 'public Host getHost()' // host getter
-- 'public void setHost(Guest)' // setter
-- 'public void addMessage(String)'
-- 'public Host findByEmail (String email)'
-Needs host repo
-Needs constructor 
-Needs public host findbyemail string email
+- public Host findByEmail (String email)
+- public hostRepository - Needs host repo
 
 
 ### domain.GuestService.java
-- 'private GuestService service'
-- 'private Guest guest'
 - 'public GuestService(GuestRepository)'
-- 'public Guest getGuest()' 
-- 'public void addMessage(String)'
 - 'public Guest findByEmail (String email)'
-same as host but replace host with guest 
+- public GuestRepository 
 
 ### domain.ResultResponse
 - 'private Reservation reservation'
@@ -282,17 +243,19 @@ add state enums class
 anywhere where you see string state it would be state state (enum)
 
 ### models.Host.java
-- 'private int guestId'
-- 'private String firstName' 
+- 'private String hostId'
 - 'private String lastName' 
 - 'private String email' 
 - 'private String phone'
 - 'private State state' //enum
 - 'private String address'
+- 'private String city'
+- 'private String zip'
+- 'private BigDecimal weekendRate'
+- 'private BigDecimal StandardRate'
 - getter and setters 
-- override equals and hashCode
-add state enums class 
-anywhere where you see string state it would be state state (anywhere state exists )
+    **add state enums class 
+    **anywhere where you see string state it would be state state (anywhere state exists )
 
 ### models.Reservation.java
 - 'private Host host'
