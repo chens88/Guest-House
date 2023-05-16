@@ -157,15 +157,10 @@ src
 ## App.java
  - 'public static void main(String[])'
  // instantiate all required classes with valid arguments, dependency injection. run controller
- 
-// Fields
-- 'private List<Reservation> reservations;'
-- 'private List<Guest> guests;'
-- 'private List<Host> hosts;'
+ - 'print MainMenu()'
 
 ## Data Layer    
-- 'print MainMenu()'
-- 
+ 
 ## data.DataException.java       
 - 'public DataException(String, Throwable)' //constructor 
 
@@ -173,19 +168,17 @@ src
 - 'public class ReservationFileRepository {}'
 - 'public void printMainMenu' 
 - 'private String filePath'
-- 'private String host'
-- 'private String guest'
-- 'private String hostId'
 - ' public List<Reservation> getAllReservations'// Retrieve all reservations from a file or data source
 - 'public String addReservation(Reservation reservation) // Make a new reservation to the repository data
 - 'public String editReservation(Reservation reservation) // Update an existing reservation in the repository data
 - 'public String cancelreservation(String reservationId) // Cancel a reservation from the repository data
-- 'public boolean'
 
 ### data.ReservationRepository.java  
 - 'public interface ReservationRepository' - //class
 - 'List<Reservation> getAllReservations(String)'
-- 'private Map<String, List<Reservation>> reservationsByHost;'
+- 'private <String, List<Reservation>> reservationsByHost;'
+- 'private <String, List<Reservation>> findAll'
+- 'private <String, List<Reservation>> findByHost'
 - 'Reservation add(Reservation)'
 - 'boolean update(Reservation)'
 - 'public List<Reservation> getAllReservationsForHost'
@@ -196,13 +189,14 @@ src
 ### data.HostFileRepository.java
 - 'public class HostFileRepository' 
 - 'public List<Host> getAllHosts' //Retrieve a host by their unique identifier 
-- 'public Host getHostById(String hostId)'
+- 'public Host getHostByEmail(String hostEmail)'
 - 'private String filePath'
 - 'public host findby email - take string of email 
-- private list findall - 
+- private list findall 
 
 ### data.HostRepository.java
 - 'public class HostFileRepository' 
+- 'method signature
 
 
 ### data.GuestFileRepository.java
@@ -228,18 +222,30 @@ src
 - 'public void setReservation'
 - 'public List findByHost (Host host)' //takes a host or hostId
 - 'public result makeReservation()'
-- 'public result editReservation'
-- 'public result cancelReservation'
+- 'public result edit <Reservation>' - 
+- 'public result cancelReservation' - delete or cancel and pass in reservation 
 - 'public result validateReservation'
+** needs reservation repo, host reposit, guest reposito
+** constructor to pass these 3 items 
+** needs public list of reservations - findbyhost and pass in host
+** might need public list of reservation - find byguestandhoest to passs 
+** public result <reservation> add - passing reservation as an argument - same for edit and cancel 
+** needs validate methods - broken down to validatenull, uniquedate, vaidatechildrenexist, and more 
+
+** Dont need model 
 
 ### domain.HostService.java
-- 'private HostService service'
+<!-- - 'private HostService service' -->
 - 'private Host host'
 - 'public HostService(HostRepository)'
 - 'public Host getHost()' // host getter
 - 'public void setHost(Guest)' // setter
 - 'public void addMessage(String)'
 - 'public Host findByEmail (String email)'
+Needs host repo
+Needs constructor 
+Needs public host findbyemail string email
+
 
 ### domain.GuestService.java
 - 'private GuestService service'
@@ -248,6 +254,7 @@ src
 - 'public Guest getGuest()' 
 - 'public void addMessage(String)'
 - 'public Guest findByEmail (String email)'
+same as host but replace host with guest 
 
 ### domain.ResultResponse
 - 'private Reservation reservation'
@@ -260,7 +267,6 @@ src
 
 
 
-
 ## Models Layer 
 
 ### models.Guest.java 
@@ -269,9 +275,11 @@ src
 - 'private String lastName' 
 - 'private String email' 
 - 'private String phone'
-- 'private String state (or can be enum)'
+- 'private State state' //enum
 - getters and setters 
 - override equals and hashCode
+add state enums class 
+anywhere where you see string state it would be state state (enum)
 
 ### models.Host.java
 - 'private int guestId'
@@ -279,21 +287,20 @@ src
 - 'private String lastName' 
 - 'private String email' 
 - 'private String phone'
-- 'private String state (or can be enum)'
+- 'private State state' //enum
 - 'private String address'
 - getter and setters 
 - override equals and hashCode
+add state enums class 
+anywhere where you see string state it would be state state (anywhere state exists )
 
 ### models.Reservation.java
-- 'private int guestId'
-- 'private int hostId'
-- 'private String host'
-- 'private String guest'
-- 'private String LocalDate start'
-- 'private String LocalDate end'
-- 'private BigDecimal standardRate'
-- 'private BigDecimal weekendRate'
-
+- 'private Host host'
+- 'private Guest guest'
+- 'private int id'
+- 'private LocalDate start'
+- 'private LocalDate end'
+- 'private BigDecimal total'
 
 
 ## UI Layer
@@ -301,12 +308,21 @@ src
 ### ui.Controller
 - 'private View view' -- required View dependency
 - 'private ReservationService service' -- required service dependency
+- 'private HostService service' -- required service dependency
+- 'private GuestService service' -- required service dependency
 - 'public Controller(View, ReservationService)
 - 'public void run()' - runs app and loops 
 - private void viewByHost() 
 - private void addReservation() 
 - private void editReservation() 
 - private void cancelReservation() 
+
+<!-- needs fields 
+guest service
+host service
+reservation service -->
+view 
+** afterwards add these to the constructor 
 
 ### ui.View.java 
 - 'private Scanner console' -- a Scanner to be used across all methods
@@ -319,22 +335,27 @@ src
 - 'public void printResult(ReservationResult)'
 - 'public void printReservation(String Host, List<Reservation>)'
 - 'public Reservation viewByHost(String Host, List<Reservation>)
-- 'public Reservation chooseReservation(String Host, List<Reservation>)'
 - 'public Reservation make(Reservation)'
 - 'public Reservation update(Reservation)' 
-
-
+// add a field for Daytime formatter in addtion to scanner or console io 
+// 
 
 ### TESTS
 
 ## Data Tests
-
+**TEST USE SHOULD AND SHOULDNOT 
 ### ReservationFileRepositoryTest.java
 - 'public class ReservationFileRepositoryTest'
 - 'public void testGetAllReservationsForHost'
-- 'public void testMakeReservation'
-- 'public void testUpdateReservation'
+- 'public void shouldMakeReservation'
+- 'public void shouldNotMakeReservation'
+- 'public void shouldUpdateReservation'
+- 'public void shouldNotUpdateReservation'
+
 - 'public void testCancelReservation
+Should gethost
+shouldnotgethost
+should
 
 ## ReservationFileRepositoryTestDouble.java
 - 'public class ReservationFileRepositoryTestDouble'
@@ -383,22 +404,25 @@ src
 
 ## ReservationServiceTest.java 
 - 'public class ReservationServiceTest'
-- 'public void testViewReservation'
-- 'public void testMakeReservation'
-- 'public void testUpdateReservation'
-- 'public void testCancelReservation'
+- 'public void ShouldViewReservation'
+- 'public void ShouldMakeReservation'
+- 'public void ShouldtestUpdateReservation'
+- 'public void ShouldtestCancelReservation'
+**Needs to test all validations**
 
 ## ReservationServiceTestDouble.java 
 - 'public class ReservationServiceTestDouble'
 
 ## HostServiceTest.java
 - 'public class HostServiceTest'
+- 'public void testFindByEmail'
 
 ## HostServiceTestDouble.java
 - 'public class HostServiceTestDouble'
 
 ## GuestServiceTest.java
 - 'public class GuestServiceTest'
+- 'public void testFindByEmail'
 
 ## GuestServiceTestDouble.java
 - 'public class GuestServiceTestDouble'
