@@ -15,7 +15,7 @@ public class Host {
     private BigDecimal StandardRate;
 
 
-    public String getHostId() {return hostId;}
+    public String getHostId() {return this.hostId;}
 
     public void setHostId(String hostId) {this.hostId = hostId;}
 

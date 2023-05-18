@@ -4,35 +4,71 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Reservation {
-    private Host host;
-    private Guest guest;
     private int id;
     private LocalDate start;
     private LocalDate end;
+    private Host host;
+    private Guest guest;
     private BigDecimal total;
 
-    public Host getHost() {return host;}
+    public Reservation(int id, LocalDate start, LocalDate end, Host host, Guest guest, BigDecimal total) {
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.host = host;
+        this.guest = guest;
+        this.total = total;
+    }
 
-    public void setHost(Host host) {this.host = host;}
+    public Reservation() {
 
-    public Guest getGuest() {return guest;}
+    }
 
-    public void setGuest(Guest guest) {this.guest = guest;}
+    public int getId() {
+        return id;
+    }
 
-    public int getId() {return id;}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int setId(int id) {this.id = id;}
+    public LocalDate getStart() {
+        return start;
+    }
 
-    public LocalDate getStart() {return start;}
+    public void setStart(LocalDate start) {
+        this.start = start;
+    }
 
-    public void setStart(LocalDate start) {this.start = start;}
+    public LocalDate getEnd() {
+        return end;
+    }
 
-    public LocalDate getEnd() {return end;}
+    public void setEnd(LocalDate end) {
+        this.end = end;
+    }
 
-    public void setEnd(LocalDate end) {this.end = end;}
+    public Host getHost() {
+        return host;
+    }
 
-    public BigDecimal getTotal() {return total;}
+    public void setHost(Host host) {
+        this.host = host;
+    }
 
-    public void setTotal(BigDecimal total) {this.total = total;}
+    public Guest getGuest() {
+        return guest;
+    }
 
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
 }
