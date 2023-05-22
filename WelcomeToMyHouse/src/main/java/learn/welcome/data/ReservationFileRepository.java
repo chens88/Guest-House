@@ -19,7 +19,7 @@ public class ReservationFileRepository implements ReservationRepository {
     private static final String HEADER = "id,start_date,end_date,guest_id,total";
     private final String directory;
 
-    public ReservationFileRepository(@Value("${directory}") String directory) {
+    public ReservationFileRepository(@Value("${ReservationFilePath:./data/reservations}") String directory) {
         this.directory = directory;
     }
 
@@ -49,6 +49,11 @@ public class ReservationFileRepository implements ReservationRepository {
         }
         return results;
     }
+
+//    @Override
+//    public List<Reservation> findByHostAndGuest(Host host, Guest guest) {
+//        List<Reservation> results = new ArrayList<>();
+//        return results;}
 
     @Override
     public Reservation addReservation(Reservation reservation) throws DataException {

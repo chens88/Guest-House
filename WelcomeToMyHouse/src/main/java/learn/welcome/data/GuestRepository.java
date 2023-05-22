@@ -9,6 +9,7 @@ public interface GuestRepository {
 
         //find all guests
         List<Guest> findAllGuests();
-        List<Guest> findByEmail(String email);
+        Guest findByEmail(String email);
 
+        Guest findById(int id);
 }

@@ -19,7 +19,7 @@ public class HostFileRepository implements HostRepository {
     private static final String HEADER = "id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
     private final String filePath;
 
-    public HostFileRepository(@Value("${guestFilePath:./data.hosts.csv}") String filePath) {
+    public HostFileRepository(@Value("${HostFilePath:./data/hosts.csv}") String filePath) {
         this.filePath = filePath;
     }
 
@@ -43,15 +43,12 @@ public class HostFileRepository implements HostRepository {
 
     //Retrieve a host by unique identifier-host email
     @Override
-    public List<Host> findByEmail(String email) {
-        ArrayList<Host> result = new ArrayList<>();
-        List<Host> all = findAllHost();
-        for (int i = 0; i < all.size(); i++) {
-            if (all.get(i).getEmail().equals(email)){
-                result.add(all.get(i));
-            }
-        }
-        return result;
+    public Host findByEmail(String email) {
+        return findAllHost().stream().filter(host -> host.getEmail()
+                .equals(email)).findFirst().orElse(null);
+        //creating list of host by calling findAll method and filtering
+        //by email passed in by method
+
     }
 
     //id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate

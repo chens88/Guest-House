@@ -9,7 +9,9 @@ public interface HostRepository {
 
     //find all hosts
     List<Host> findAllHost();
-    List<Host> findByEmail(String email);
+
+    //returns singular Host with email
+    Host findByEmail(String email);
 
 
 }

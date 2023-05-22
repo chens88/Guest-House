@@ -18,7 +18,8 @@ public class GuestFileRepository implements GuestRepository {
     //guest_id,first_name,last_name,email,phone,state
     private static final String HEADER = "guest_id,first_name,last_name,email,phone,state";
     private final String filePath;
-    public GuestFileRepository(@Value("${guestFilePath}") String filePath) {
+    public GuestFileRepository(@Value("${GuestFilePath:./data/guests.csv}") String filePath) {
+        System.out.println(filePath);
         this.filePath = filePath;
     }
 
@@ -41,15 +42,22 @@ public class GuestFileRepository implements GuestRepository {
     }
 
     @Override
-    public List<Guest> findByEmail(String email) {
-        ArrayList<Guest> result = new ArrayList<>();
+    public Guest findByEmail(String email) {
+
         List<Guest> all = findAllGuests();
+
         for (int i = 0; i < all.size(); i++) {
-            if (all.get(i).getEmail().equals(email)){
-                result.add(all.get(i));
+            if (all.get(i).getEmail().contains(email)) {
+                return all.get(i);
             }
         }
-        return result;
+        return null;
+    }
+
+    @Override
+    public Guest findById(int id) {
+        List<Guest> all = findAllGuests();
+        return all.stream().filter(g -> g.getGuestId() == id).findFirst().orElse(null);
     }
 
     //guest_id,first_name,last_name,email,phone,state

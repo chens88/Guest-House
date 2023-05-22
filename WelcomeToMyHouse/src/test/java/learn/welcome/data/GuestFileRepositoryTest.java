@@ -22,6 +22,7 @@ public class GuestFileRepositoryTest {
         assertEquals(GUEST_COUNT, guests.size());
     }
 
+
     //guest_id,first_name,last_name,email,phone,state
     //1,Sullivan,Lomas,slomas0@mediafire.com,(702) 7768761,NV
     @Test

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import java.util.Arrays;
 
 @ComponentScan
-@PropertySource("classpath:data.properties")
+@PropertySource("classpath:application.properties")
 public class App {
     public static void main(String[] args) {
 
