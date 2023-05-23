@@ -2,6 +2,7 @@ package learn.welcome.data;
 
 import learn.welcome.models.Guest;
 import learn.welcome.models.Reservation;
+import learn.welcome.models.State;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -45,5 +46,21 @@ public class GuestFileRepositoryTest {
         testGuest.setEmail("randomemail@domain.com");
         assertTrue(guest.getEmail().equals(testGuest.getEmail()));
 
+    }
+//1,Sullivan,Lomas,slomas0@mediafire.com,(702) 7768761,NV
+    @Test
+    void shouldFindById() {
+        Guest guest = repository.findById(1);
+        assertEquals(guest.getEmail(), "slomas0@mediafire.com");
+        assertEquals(guest.getFirstName(), "Sullivan");
+        assertEquals(guest.getLastName(), "Lomas");
+        assertEquals(guest.getPhone(), "(702) 7768761");
+        assertEquals(guest.getState(), State.NV);
+
+    }
+    @Test
+    void shouldNotFindById() {
+        Guest guest = repository.findById(-1);
+        assertNull(guest);
     }
 }

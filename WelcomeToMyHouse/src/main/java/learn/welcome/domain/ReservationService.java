@@ -33,7 +33,9 @@ public class ReservationService {
     public List<Reservation> findByHost(Host host) {
 
         List<Reservation> result = reservationRepository.findByHost(host);
-
+        result.forEach(reservation -> {
+            reservation.setGuest(guestRepository.findById(reservation.getGuest().getGuestId()));
+        });
         return result;
     }
 

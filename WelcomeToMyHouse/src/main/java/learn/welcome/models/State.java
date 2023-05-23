@@ -1,6 +1,11 @@
 package learn.welcome.models;
 
 public enum State {
+
+//    private String displayName;
+//    public State(String displayName) {
+//        this.displayName = displayName;
+//    }
     AL,
     AK,
     AZ,

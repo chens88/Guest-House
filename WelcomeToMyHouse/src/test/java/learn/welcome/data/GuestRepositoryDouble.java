@@ -40,7 +40,7 @@ private final List<Guest> guests = new ArrayList<>();
 
     @Override
     public Guest findById(int id) {
-        return null;
+        return findAllGuests().stream().filter(guest -> guest.getGuestId() == id).findFirst().orElse(null);
     }
 
 }

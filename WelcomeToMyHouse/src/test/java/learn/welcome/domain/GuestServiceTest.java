@@ -31,7 +31,7 @@ GuestService service = new GuestService (new GuestRepositoryDouble());
 
     @Test
     void shouldNotFindUnknownEmail() {
-        Guest guest= service.findByEmail("unknownemail@domain.com");
+        Guest guest = service.findByEmail("unknownemail@domain.com");
         assertNull(guest); //guest shouldn't exist
     }
 }

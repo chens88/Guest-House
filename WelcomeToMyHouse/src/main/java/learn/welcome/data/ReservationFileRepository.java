@@ -50,11 +50,6 @@ public class ReservationFileRepository implements ReservationRepository {
         return results;
     }
 
-//    @Override
-//    public List<Reservation> findByHostAndGuest(Host host, Guest guest) {
-//        List<Reservation> results = new ArrayList<>();
-//        return results;}
-
     @Override
     public Reservation addReservation(Reservation reservation) throws DataException {
         List<Reservation> all = findByHost(reservation.getHost());
