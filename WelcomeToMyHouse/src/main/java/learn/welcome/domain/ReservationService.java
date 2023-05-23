@@ -39,15 +39,15 @@ public class ReservationService {
         return result;
     }
 
-        public List<Reservation> findByHostAndGuest(Host host, Guest guest){
+    public List<Reservation> findByHostAndGuest(Host host, Guest guest) {
         List<Reservation> result = reservationRepository.findByHost(host);
         List<Reservation> reservationsForGuest = new ArrayList<>();
-            for (int i = 0; i < result.size(); i++){
-                if (result.get(i).getGuest().equals(guest)) {
-                    reservationsForGuest.add(result.get(i));
-                }
+        for (int i = 0; i < result.size(); i++) {
+            if (result.get(i).getGuest().equals(guest)) {
+                reservationsForGuest.add(result.get(i));
             }
-            return reservationsForGuest;
+        }
+        return reservationsForGuest;
     }
 
     public Result<Reservation> cancelReservation(Reservation reservation) throws DataException {
@@ -59,9 +59,9 @@ public class ReservationService {
             return result;
         }
 
-        if (reservation.getStart().isBefore(LocalDate.now())){
+        if (reservation.getStart().isBefore(LocalDate.now())) {
             result.addErrorMessages("Unable to delete past reservations.");
-        return result;
+            return result;
         }
         result.setPayload(reservation);
         return result;
@@ -93,109 +93,112 @@ public class ReservationService {
         return result;
     }
 
-        //helper methods- validate methods
-        public Result<Reservation> validate (Reservation reservation){
+    //helper methods- validate methods
+    public Result<Reservation> validate(Reservation reservation) {
 
-            Result<Reservation> result = validateNulls(reservation);
-            if (!result.isSuccess()) {
-                return result;
-            }
-
-            validateDates(reservation, result);
-            if (!result.isSuccess()) {
-                return result;
-            }
-
-            validateChildrenExist(reservation, result);
-            return result;
-    }
-
-
-        //check that all fields are not empty in reservation
-        private Result<Reservation> validateNulls (Reservation reservation){
-            Result<Reservation> result = new Result<>();
-
-            if (reservation == null) {
-                result.addErrorMessages("Nothing to save.");
-                return result;
-            }
-
-            if (reservation.getHost() == null) {
-                result.addErrorMessages("Host is required.");
-                return result;
-            }
-
-            if (reservation.getGuest() == null) {
-                result.addErrorMessages("Guest is required.");
-                return result;
-            }
-
-            if (reservation.getStart() == null) {
-                result.addErrorMessages("Reservation start date is required.");
-                return result;
-            }
-
-            if (reservation.getEnd() == null) {
-                result.addErrorMessages("Reservation end date is required.");
-                return result;
-            }
+        Result<Reservation> result = validateNulls(reservation);
+        if (!result.isSuccess()) {
             return result;
         }
 
-        //**No Overlap: Cannot make reservation in the past - cannot have overlapping reservations
-        ////( start and end cannot be same day - at least one day apart)
-        private void validateDates (Reservation reservation, Result < Reservation > result){
-            if (reservation.getStart().isBefore(LocalDate.now())) {
-                result.addErrorMessages("Reservations can only be made for future dates.");
-            }
-            if (reservation.getEnd().isBefore(reservation.getStart())) {
-                result.addErrorMessages("Reservation end date has to be after the start date.");
-            }
-
-            for (Reservation r : reservationRepository.findByHost(reservation.getHost())) {
-                if (r.getId() == reservation.getId()) {
-                    continue;
-                }
-                LocalDate startDate = r.getStart();
-                LocalDate endDate = r.getEnd();
-
-
-                if ((reservation.getStart().isBefore(startDate) && (reservation.getEnd().isAfter(startDate)))
-                        || (reservation.getStart().isAfter(startDate)) && reservation.getEnd().isBefore(endDate)) {
-                    result.addErrorMessages("Reservation dates cannot overlap existing reservation dates.");
-                } else if (reservation.getStart().isEqual(startDate) || (reservation.getStart().isEqual(endDate))
-                        || (reservation.getEnd().isEqual(startDate)) || reservation.getStart().isEqual(endDate)) {
-                    result.addErrorMessages("Reservation dates cannot overlap existing reservation dates.");
-                }
-            }
+        validateDates(reservation, result);
+        if (!result.isSuccess()) {
+            return result;
         }
 
-        //validates guests and hosts exists - checks the database
-        private void validateChildrenExist (Reservation reservation, Result < Reservation > result){
+        validateChildrenExist(reservation, result);
+        return result;
+    }
 
-            if (guestRepository.findById(reservation.getGuest().getGuestId()) == null) {
-                result.addErrorMessages("Guest doesn't exist.");
-            }
-            if (reservation.getHost().getHostId() == null
-                    || hostRepository.findByEmail(reservation.getHost().getEmail()) == null) {
-                result.addErrorMessages("Host doesn't exist.");
-            }
+
+    //check that all fields are not empty in reservation
+    private Result<Reservation> validateNulls(Reservation reservation) {
+        Result<Reservation> result = new Result<>();
+
+        if (reservation == null) {
+            result.addErrorMessages("Nothing to save.");
+            return result;
         }
 
-        public BigDecimal createValue(Reservation reservation) {
-            LocalDate date = reservation.getStart();
-            BigDecimal total = BigDecimal.ZERO;
+        if (reservation.getHost() == null) {
+            result.addErrorMessages("Host is required.");
+            return result;
+        }
 
-            long difference = date.until(reservation.getEnd(), ChronoUnit.DAYS);
-            for (long i = 0; i < difference; i++) {
-                if (date.plusDays(i).getDayOfWeek() == DayOfWeek.SATURDAY || date.plusDays(i).getDayOfWeek()  == DayOfWeek.SUNDAY ) {
-                    total = total.add(reservation.getHost().getWeekendRate());
-                } else {
-                    total = total.add(reservation.getHost().getStandardRate());
-                }
+        if (reservation.getGuest() == null) {
+            result.addErrorMessages("Guest is required.");
+            return result;
+        }
+
+        if (reservation.getStart() == null) {
+            result.addErrorMessages("Reservation start date is required.");
+            return result;
+        }
+
+        if (reservation.getEnd() == null) {
+            result.addErrorMessages("Reservation end date is required.");
+            return result;
+        }
+        return result;
+    }
+
+    //**No Overlap: Cannot make reservation in the past - cannot have overlapping reservations
+    ////( start and end cannot be same day - at least one day apart)
+    private void validateDates(Reservation reservation, Result<Reservation> result) {
+        if (reservation.getStart().isBefore(LocalDate.now())) {
+            result.addErrorMessages("Reservations can only be made for future dates.");
+        }
+        if (reservation.getEnd().isBefore(reservation.getStart())) {
+            result.addErrorMessages("Reservation end date has to be after the start date.");
+        }
+
+        for (Reservation r : reservationRepository.findByHost(reservation.getHost())) {
+            if (r.getId() == reservation.getId()) {
+                continue;
             }
+            LocalDate startDate = r.getStart();
+            LocalDate endDate = r.getEnd();
 
-            return total.setScale(2, RoundingMode.HALF_UP);
+
+            if ((reservation.getStart().isBefore(startDate) && (reservation.getEnd().isAfter(startDate)))
+                    || (reservation.getStart().isAfter(startDate)) && reservation.getEnd().isBefore(endDate)) {
+                result.addErrorMessages("Reservation dates cannot overlap existing reservation dates.");
+            } else if (reservation.getStart().isEqual(startDate) || (reservation.getStart().isEqual(endDate))
+                    || (reservation.getEnd().isEqual(startDate)) || reservation.getStart().isEqual(endDate)) {
+                result.addErrorMessages("Reservation dates cannot overlap existing reservation dates.");
+            }
         }
     }
+
+    //validates guests and hosts exists - checks the database
+    private void validateChildrenExist(Reservation reservation, Result<Reservation> result) {
+
+        if (guestRepository.findById(reservation.getGuest().getGuestId()) == null) {
+            result.addErrorMessages("Guest doesn't exist.");
+        }
+        if (reservation.getHost().getHostId() == null
+                || hostRepository.findByEmail(reservation.getHost().getEmail()) == null) {
+            result.addErrorMessages("Host doesn't exist.");
+        }
+    }
+
+    public BigDecimal createValue(Reservation reservation) {
+        LocalDate date = reservation.getStart();
+        BigDecimal total = BigDecimal.ZERO;
+
+        long difference = date.until(reservation.getEnd(), ChronoUnit.DAYS);
+        for (long i = 0; i < difference; i++) {
+            if (date.plusDays(i).getDayOfWeek() == DayOfWeek.SATURDAY) {
+                total = total.add(reservation.getHost().getWeekendRate());
+            } else if (date.plusDays(i).getDayOfWeek() == DayOfWeek.SUNDAY) {
+                total = total.add(reservation.getHost().getWeekendRate());
+            } else {
+                total = total.add(reservation.getHost().getStandardRate());
+            }
+        }
+
+        return total.setScale(2, RoundingMode.HALF_UP);
+    }
+}
+
 

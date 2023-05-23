@@ -86,7 +86,13 @@ public class Controller {
         if (host != null) {
             view.displayHeader(host.getLastName() + ": " + host.getCity() + ", " + host.getState());
             List<Reservation> reservations = reservationService.findByHost(host);
-            view.displayReservations(reservations);
+            if (reservations.isEmpty()){
+                view.displayHeader("There are no reservations for this host. ");
+            } else {
+                view.displayReservations(reservations);
+            }
+        } else{
+            view.displayHeader("There is no host with this email. Please enter an existing host email. ");
         }
         view.enterToContinue();
     }
@@ -113,6 +119,12 @@ public class Controller {
         Reservation reservation = view.makeReservation(guest, host);
         BigDecimal value = reservationService.createValue(reservation);
         reservation.setTotal(value);
+        Result<Reservation> valid = reservationService.validate(reservation);
+        if (!valid.isSuccess()){
+            view.displayStatus(false, valid.getErrorMessages());
+            System.out.println("Returning to Main Menu. ");
+            return;
+        }
         System.out.printf("%nTotal: $%.2f%n", reservation.getTotal());
         if (view.getConfirm()) {
             Result<Reservation> result = reservationService.addReservation(reservation);
