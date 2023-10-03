@@ -1,4 +1,4 @@
-# Mastery-Week
+# Guest Reservations Service App
 
 ## Technical Requirements:
 
@@ -18,7 +18,6 @@
 - [ ] Edit existing reservations 
 - [ ] Cancel a future reservation 
 
- ## Don't Wreck My House!
 
 ### TASK LIST
 - [ ] Set up Maven project [1.5 hour]
